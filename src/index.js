@@ -1,20 +1,34 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import YTSearch from 'youtube-api-search';
-
 import SearchBar from './components/search_bar';
+import VideoList from './components/video_list';
+import VideoDetail from './components/video_detail';
 
 const API_KEY = 'AIzaSyCvSLScbQHb32LR84YTlH8olG6sOGJcD0I';
 //YTSearch from the youtube api
-YTSearch({key: API_KEY, term: 'surfboards'}, function(data){
-  console.log(data);
-});
+
 
 // Create a new component. It produces HTML
-const App = () => {
+class App extends Component {
+  constructor(props){
+    super(props);
 
-  return (<div><SearchBar /></div>);
-
+    this.state = { videos: [] };
+    YTSearch({key: API_KEY, term: 'ski mask the slump god'}, (videos) => {
+      this.setState({ videos }); // ES6 same name as state Therefore same as videos: videos
+    });
+  }
+  //rendering SearchBar and VideoList- passing props to VideoList to use
+  render() {
+    return (
+      <div>
+        <SearchBar />
+        <VideoDetail video={this.state.videos[0]}/>
+        <VideoList  videos={this.state.videos} />
+      </div>
+    );
+  }
 }
 
 
