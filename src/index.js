@@ -14,9 +14,16 @@ class App extends Component {
   constructor(props){
     super(props);
 
-    this.state = { videos: [] };
+    this.state = {
+      videos: [],
+      selectedVideo: null
+
+    };
     YTSearch({key: API_KEY, term: 'ski mask the slump god'}, (videos) => {
-      this.setState({ videos }); // ES6 same name as state Therefore same as videos: videos
+      this.setState({
+         videos: videos,
+         selectedVideo: videos[0]
+       }); // ES6 same name as state Therefore same as videos: videos
     });
   }
   //rendering SearchBar and VideoList- passing props to VideoList to use
@@ -24,8 +31,11 @@ class App extends Component {
     return (
       <div>
         <SearchBar />
-        <VideoDetail video={this.state.videos[0]}/>
-        <VideoList  videos={this.state.videos} />
+        <VideoDetail video={this.state.selectedVideo} />
+        <VideoList
+           videos={this.state.videos}
+           onVideoSelect={selectedVideo => this.setState({selectedVideo})}
+         />
       </div>
     );
   }
